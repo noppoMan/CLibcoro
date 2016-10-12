@@ -377,9 +377,9 @@ struct coro_context
 {
   coro_jmp_buf env;
 };
-
-# define coro_transfer(p,n) do { if (!coro_setjmp ((p)->env)) coro_longjmp ((n)->env); } while (0)
-# define coro_destroy(ctx) (void *)(ctx)
+  
+#define coro_transfer(p,n) do { if (!coro_setjmp ((p)->env)) coro_longjmp ((n)->env); } while (0)
+#define coro_destroy(ctx) (void *)(ctx)
 
 #elif CORO_ASM
 
@@ -432,3 +432,15 @@ void coro_destroy (coro_context *ctx);
 #endif
 
 #endif
+
+void
+swift_coro_destroy(coro_context *ctx)
+{
+    coro_destroy(ctx);
+}
+
+void
+swift_coro_transfer(coro_context *prev, coro_context *next)
+{
+    coro_transfer(prev, next);
+}
